@@ -1,10 +1,9 @@
-<table>
-<tbody>
-<tr class="odd">
-<td align="left">Course project 1: Reproducible Research</td>
-</tr>
-</tbody>
-</table>
+Untitled
+================
+
+|                                         |
+|:----------------------------------------|
+| Course project 1: Reproducible Research |
 
 Loading and preprocessing the data
 ==================================
@@ -12,38 +11,47 @@ Loading and preprocessing the data
 Load data
 ---------
 
-    data<-read.csv("activity.csv")
+``` r
+data<-read.csv("activity.csv")
+```
 
 What is mean total number of steps taken per day?
 =================================================
 
-For this part of the assignment, you can ignore the missing values in
-the dataset.
+For this part of the assignment, you can ignore the missing values in the dataset.
 
 Calculate the total number of steps taken per day
 -------------------------------------------------
 
-    daily_steps <- aggregate(steps ~ date, data, FUN=sum,na.rm=TRUE)
+``` r
+daily_steps <- aggregate(steps ~ date, data, FUN=sum,na.rm=TRUE)
+```
 
 Make a histogram of the total number of steps taken each day
 ------------------------------------------------------------
 
-    hist(daily_steps$steps, main = "Histogram of total number of steps taken each day", xlab = "Steps",ylab="# days")
+``` r
+hist(daily_steps$steps, main = "Histogram of total number of steps taken each day", xlab = "Steps",ylab="# days")
+```
 
-![](pa_test_files/figure-markdown_strict/histogram_steps_per_day-1.png)
+![](pa_test_files/figure-markdown_github/histogram_steps_per_day-1.png)
 
 Calculate and report the mean and median of the total number of steps taken per day
 -----------------------------------------------------------------------------------
 
 ### Mean of the total number of steps taken per day
 
-    mean(daily_steps$steps)
+``` r
+mean(daily_steps$steps)
+```
 
     ## [1] 10766.19
 
 ### Median of the total number of steps taken per day
 
-    median(daily_steps$steps)
+``` r
+median(daily_steps$steps)
+```
 
     ## [1] 10765
 
@@ -55,20 +63,24 @@ Make a time series plot (i.e.type = "l") of the 5-minute interval (x-axis) and t
 
 ### Calculate average steps per interval
 
-    steps_per_interval <- aggregate(steps ~ interval, data, FUN=mean,na.rm=TRUE)
-    interval <- levels(as.factor(data$interval))
+``` r
+steps_per_interval <- aggregate(steps ~ interval, data, FUN=mean,na.rm=TRUE)
+interval <- levels(as.factor(data$interval))
+```
 
 ### Time series plot
 
-    plot(interval, steps_per_interval$steps, type = "l",
-         main = "Plot of the average number of steps taken per interval",
-         xlab = "Interval", ylab = "Average number of steps taken")
+``` r
+plot(interval, steps_per_interval$steps, type = "l",
+     main = "Plot of the average number of steps taken per interval",
+     xlab = "Interval", ylab = "Average number of steps taken")
+```
 
-![](pa_test_files/figure-markdown_strict/plot_steps_per_interval-1.png)
-\#\#Which 5-minute interval, on average across all the days in the
-dataset, contains the maximum number of steps?
+![](pa_test_files/figure-markdown_github/plot_steps_per_interval-1.png) \#\#Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
-    steps_per_interval[which.max(steps_per_interval$steps), ]$interval
+``` r
+steps_per_interval[which.max(steps_per_interval$steps), ]$interval
+```
 
     ## [1] 835
 
@@ -81,7 +93,9 @@ Note that there are a number of days/intervals where there are missing values (c
 Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
 ---------------------------------------------------------------------------------------------------------------
 
-    nrow(data[(!complete.cases(data)),])
+``` r
+nrow(data[(!complete.cases(data)),])
+```
 
     ## [1] 2304
 
@@ -93,38 +107,48 @@ Devise a strategy for filling in all of the missing values in the dataset. The s
 Create a new dataset that is equal to the original dataset but with the missing data filled in.
 -----------------------------------------------------------------------------------------------
 
-    adj<- rep(steps_per_interval$steps,length(unique(data$date)))
-    data_new<-data
+``` r
+adj<- rep(steps_per_interval$steps,length(unique(data$date)))
+data_new<-data
 
-    for (i in 1:length(data_new[,1])){  
-      
-      if(is.na(data_new[i,1])==TRUE){
-        data_new[i,1]= adj[i]
-      }}
+for (i in 1:length(data_new[,1])){  
+  
+  if(is.na(data_new[i,1])==TRUE){
+    data_new[i,1]= adj[i]
+  }}
+```
 
 Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ### Calculate the total number of steps taken per day for the updated data
 
-    steps_per_day_new <- aggregate(steps ~ date, data_new, FUN=sum,na.rm=TRUE)
+``` r
+steps_per_day_new <- aggregate(steps ~ date, data_new, FUN=sum,na.rm=TRUE)
+```
 
 ### Plot the histogram of the total number of steps taken each day
 
-    hist(steps_per_day_new$steps, main = "Histogram of total number of steps taken each day", 
-         xlab = "Steps",ylab="# days")
+``` r
+hist(steps_per_day_new$steps, main = "Histogram of total number of steps taken each day", 
+     xlab = "Steps",ylab="# days")
+```
 
-![](pa_test_files/figure-markdown_strict/hist_steps_per_day_new-1.png)
+![](pa_test_files/figure-markdown_github/hist_steps_per_day_new-1.png)
 
 ### Mean of the total number of steps taken per day
 
-    mean(steps_per_day_new$steps)
+``` r
+mean(steps_per_day_new$steps)
+```
 
     ## [1] 10766.19
 
 ### Median of the total number of steps taken per day
 
-    median(steps_per_day_new$steps)
+``` r
+median(steps_per_day_new$steps)
+```
 
     ## [1] 10766.19
 
@@ -139,23 +163,27 @@ For this part the weekdays() function may be of some help here. Use the dataset 
 Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
 --------------------------------------------------------------------------------------------------------------------------------------------------
 
-    data_new$date<-as.Date(data_new$date) #Convert factor to date
+``` r
+data_new$date<-as.Date(data_new$date) #Convert factor to date
 
-    data_new$day<-weekdays(data_new$date)
+data_new$day<-weekdays(data_new$date)
 
-    weekend<-data_new[(weekdays(data_new$date) %in% c("Saturday","Sunday")),]   
-    weekday<-data_new[(!weekdays(data_new$date) %in% c("Saturday","Sunday")),]
+weekend<-data_new[(weekdays(data_new$date) %in% c("Saturday","Sunday")),]   
+weekday<-data_new[(!weekdays(data_new$date) %in% c("Saturday","Sunday")),]
 
-    weekend$group <- "weekend"
-    weekday$group<- "weekday"
+weekend$group <- "weekend"
+weekday$group<- "weekday"
+```
 
 Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    library(ggplot2)
-    avg_steps <- aggregate(steps~ interval+group, rbind(weekend,weekday), FUN=mean,na.rm=TRUE)
-    qplot(interval, steps, data = avg_steps, facets = group~.) + 
-    geom_line(size = 1) + ylab("Mean steps") + 
-    ggtitle("Average number of steps taken")
+``` r
+library(ggplot2)
+avg_steps <- aggregate(steps~ interval+group, rbind(weekend,weekday), FUN=mean,na.rm=TRUE)
+qplot(interval, steps, data = avg_steps, facets = group~.) + 
+geom_line(size = 1) + ylab("Mean steps") + 
+ggtitle("Average number of steps taken")
+```
 
-![](pa_test_files/figure-markdown_strict/panel_plot_steps_weekday-1.png)
+![](pa_test_files/figure-markdown_github/panel_plot_steps_weekday-1.png)
